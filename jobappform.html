@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <style>
+        form {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        fieldset {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form action="#" method="post">
+        <fieldset>
+            <legend>Personal Information</legend>
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first-name" required pattern="[A-Z]{3,20}" title="Must be uppercase, 3-20 characters">p
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last-name" required pattern="[A-Z]{3,20}" title="Must be uppercase, 3-20 characters">
+        </fieldset>
+
+        <fieldset>
+            <legend>Contact Details</legend>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.dz" title="Must be an Algerian email (.dz)">
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required pattern="\+213[5-7][0-9]{8}" title="Must be an Algerian number (+213xxxxxxxxx)">
+        </fieldset>
+
+        <fieldset>
+            <legend>Account Details</legend>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required minlength="8" title="At least 8 characters">
+        </fieldset>
+        
+        <fieldset>
+            <legend>Address</legend>
+            <label for="address">Postal Address:</label>
+            <input type="text" id="address" name="address" required pattern="N° \d+-Avenue [A-Za-z]+" title="Format: N° 145-Avenue BJ">
+        </fieldset>
+
+        <fieldset>
+            <legend>Additional Information</legend>
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" maxlength="70"></textarea>
+        </fieldset>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
