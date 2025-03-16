@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Function to navigate to the book details page
-function goToBookDetails(page) {
-  window.location.href = page;
+function goToBookDetails(title, author, image, description) {
+  const url = `bdetail.html?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&image=${encodeURIComponent(image)}&description=${encodeURIComponent(description)}`;
+  window.location.href = url;
 }
+
