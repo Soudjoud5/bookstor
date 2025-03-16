@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="pay.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Page</h1>
+
+        <!-- Display the selected book -->
+        <div id="bookDetails" class="book-details">
+            <!-- The selected book title will appear here -->
+        </div>
+
+        <!-- Payment Form -->
+        <form id="paymentForm">
+            <h2>Billing Information</h2>
+            
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter your card number" required>
+
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="month" id="expiryDate" name="expiryDate" required>
+
+            <label for="cvv">CVV:</label>
+            <input type="password" id="cvv" name="cvv" placeholder="Enter CVV" required>
+
+            <button type="submit">Pay Now</button>
+        </form>
+    </div>
+
+    <!-- JavaScript to handle book details -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Get the URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const book = params.get("book"); // Retrieve the 'book' parameter
+
+            // Display the book title on the payment page
+            if (book) {
+                const bookDetails = document.getElementById("bookDetails");
+                bookDetails.textContent = `You are purchasing: ${book}`;
+            }
+        });
+    </script>
+</body>
+</html>

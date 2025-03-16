@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <link rel="stylesheet" href="book.css">
+    <script src="book.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Bookstore Inventory</h1>
+        
+        <!-- Search bar -->
+        <input type="text" id="searchBar" placeholder="Search for a book..." onkeyup="filterBooks()">
+
+        <!-- Book list -->
+        <div id="bookList">
+            <div class="book-card">
+                <img src="fr.jpg" alt="Book 1" class="book-image">
+                <div class="book-details">
+                    <h3>Book 1: Title A</h3>
+                    <p>By Author q</p>
+                    <button onclick="goToBookDetails('book1.html')">Book Details</button>
+                </div>
+            </div>
+            <div class="book-card">
+                <img src="dos.jpg" alt="Book 2" class="book-image">
+                <div class="book-details">
+                    <h3>Book 2: Title B</h3>
+                    <p>By Author Y</p>
+                    <button onclick="goToBookDetails('book2.html')">Book Details</button>
+                </div>
+            </div>
+            <div class="book-card">
+                <img src="dos2.jpg" alt="Book 3" class="book-image">
+                <div class="book-details">
+                    <h3>Book 3: Title C</h3>
+                    <p>By Author Z</p>
+                    <button onclick="goToBookDetails('book3.html')">Book Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+   
+</body>
+</html>
