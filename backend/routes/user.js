@@ -26,7 +26,7 @@ router.post("/sign-up", async (req, res) => {
 
       //check password's length !
       if(password.length <= 5){
-        return rse
+        return res
         .status(400)
         .json({ message: "password's length should br grather than 5"});
     }
