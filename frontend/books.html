@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookstore</title>
     <link rel="stylesheet" href="book.css">
-    <script src="script.js" defer></script>
+    <script src="book.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -21,7 +21,9 @@
                 <div class="book-details">
                     <h3>Book 1: Title A</h3>
                     <p>By Author X</p>
-                    <button onclick="goToPayment()">Buy</button>
+                    <button onclick="goToBookDetails('Book 1: Title A', 'Author X', 'fr.jpg', 'A great book about how to make friends.')">
+                        Book Details
+                    </button>
                 </div>
             </div>
             <div class="book-card">
@@ -29,7 +31,9 @@
                 <div class="book-details">
                     <h3>Book 2: Title B</h3>
                     <p>By Author Y</p>
-                    <button onclick="goToPayment()">Buy</button>
+                    <button onclick="goToBookDetails('Book 2: Title B', 'Author Y', 'dos.jpg', 'nnnfdfhjjhxsfh.')">
+                        Book Details
+                    </button>
                 </div>
             </div>
             <div class="book-card">
@@ -37,19 +41,16 @@
                 <div class="book-details">
                     <h3>Book 3: Title C</h3>
                     <p>By Author Z</p>
-                    <button onclick="goToPayment()">Buy</button>
+                    <button onclick="goToBookDetails('Book 3: Title C', 'Author Z', 'dos2.jpg', 'A deep dive into history.')">
+                        Book Details
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="book-card">
-        <img src="book1.jpg" alt="Book 1" class="book-image">
-        <div class="book-details">
-            <h3>Book 1: Title A</h3>
-            <p>By Author X</p>
-            <button onclick="goToPayment('Book 1: Title A')">Buy</button>
-        </div>
-    </div>
     
+   
 </body>
 </html>
+
+    
