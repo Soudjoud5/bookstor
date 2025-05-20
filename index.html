@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookstore</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    section { display: none; }
+    section.active { display: block; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <img src="booklogo.jpeg" alt="Book Logo">
+  </div>
+  <div class="nav-links">
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('login')">Login</a>
+    <a href="#" onclick="showSection('register')">Register</a>
+    <a href="#" onclick="showSection('profile')">Profile</a>
+    <a href="#" onclick="showCart()">Cart</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+</nav>
+
+<h1>Welcome to Inked... Your Online Bookstore!</h1>
+
+<section id="home" class="active">
+  <h2>Your next favorite book is just a click away... discover, explore and lose yourself in every page</h2>
+  <select id="genre-filter">
+    <option value="">All Genres</option>
+    <option>Fiction</option>
+    <option>Non-Fiction</option>
+    <option>Romance</option>
+    <option>Mystery</option>
+    <option>Sci-Fi</option>
+  </select>
+
+  <div id="book-list"></div>
+</section>
+
+<section id="login">
+  <h2>Login</h2>
+  <form onsubmit="login(event)">
+    <input type="text" id="loginUsername" placeholder="Username" required><br>
+    <input type="password" id="loginPassword" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
+</section>
+
+<section id="register">
+  <h2>Register</h2>
+  <form onsubmit="register(event)">
+    <input type="text" id="registerUsername" placeholder="Username" required><br>
+    <input type="email" id="registerEmail" placeholder="Email" required><br>
+    <input type="password" id="registerPassword" placeholder="Password" required><br>
+    <button type="submit">Register</button>
+  </form>
+</section>
+
+<section id="profile">
+  <h2>Profile</h2>
+  <div id="user-info">
+    <p><strong>Username:</strong> <span id="username"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Registered:</strong> <span id="registration-date"></span></p>
+  </div>
+
+  <h3>Feedback</h3>
+  <form id="feedback-form" onsubmit="submitFeedback(event)">
+    <textarea id="feedback-message" placeholder="We’d love to hear your thoughts!" required></textarea><br>
+    <button type="submit">Submit Feedback</button>
+  </form>
+
+  <h3>Account Settings</h3>
+  <form id="update-profile">
+    <input type="text" id="new-username" placeholder="New Username"><br>
+    <input type="email" id="new-email" placeholder="New Email"><br>
+    <input type="password" id="new-password" placeholder="New Password"><br>
+    <button type="submit">Update Profile</button>
+  </form>
+</section>
+
+<section id="cart">
+  <h2>Your Cart</h2>
+  <div id="cart-list"></div>
+  <p><strong>Total:</strong> $<span id="cart-total">0</span></p>
+  <button onclick="checkout()">Proceed to Payment</button>
+</section>
+
+<script>
+  let loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  let cart = [];
+  let books = []; // store loaded books globally
+
+  // Show section by ID and hide others
+  function showSection(sectionId) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+
+    // If home section, reload books
+    if (sectionId === 'home') {
+      displayBooks(books);
+    }
+  }
+
+  async function register(e) {
+    e.preventDefault();
+    const username = document.getElementById('registerUsername').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password })
+    });
+
+    const data = await res.json();
+    alert(data.message);
+
+    if (data.success) {
+      showSection('login');
+    }
+  }
+
+  async function login(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+    if (data.message === 'Login successful') {
+      alert('Login successful!');
+      loggedIn = true;
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userRole', data.role);
+
+      if (data.role === 'admin') {
+        window.location.href = 'admin.html';
+      } else {
+        loadProfile();
+        showSection('home'); // FIX: Go to home after login
+      }
+    } else {
+      alert('Invalid credentials');
+    }
+  }
+
+  async function loadProfile() {
+    const res = await fetch('/api/profile');
+    const data = await res.json();
+
+    if (data.username) {
+      document.getElementById('username').textContent = data.username;
+      document.getElementById('email').textContent = data.email || 'Not provided';
+      document.getElementById('registration-date').textContent = data.registrationDate || 'N/A';
+    }
+  }
+
+  async function submitFeedback(e) {
+    e.preventDefault();
+    const message = document.getElementById('feedback-message').value;
+
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Thanks for your feedback!');
+    document.getElementById('feedback-form').reset();
+  }
+
+  async function logout() {
+    await fetch('/api/logout');
+    alert('Logged out');
+    loggedIn = false;
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userRole');
+    showSection('login');
+  }
+
+  function addToCart(book) {
+    if (!loggedIn) {
+      alert('Please login first to add to cart');
+      return;
+    }
+    cart.push(book);
+    alert(`Added "${book.title}" to cart`);
+    showCart();
+  }
+
+  function removeFromCart(book) {
+    cart = cart.filter(item => item.id !== book.id);
+    alert(`Removed "${book.title}" from cart`);
+    showCart();
+  }
+
+  function showCart() {
+    const cartSection = document.getElementById('cart');
+    const list = document.getElementById('cart-list');
+    const totalSpan = document.getElementById('cart-total');
+    list.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+      const div = document.createElement('div');
+      div.textContent =` ${item.title} - $${item.price}`;
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = () => removeFromCart(item);
+      div.appendChild(removeButton);
+      list.appendChild(div);
+      total += item.price;
+    });
+
+    totalSpan.textContent = total.toFixed(2);
+    showSection('cart');
+  }
+
+  function checkout() {
+    if (cart.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+    alert('Payment is done');
+    cart = [];
+    showCart();
+  }
+
+  // Display books (helper function)
+  function displayBooks(items) {
+    const list = document.getElementById('book-list');
+    list.innerHTML = '';
+    items.forEach(book => {
+      if (!book.price) { book.price = Math.floor(Math.random() * 20) + 5; }
+      const div = document.createElement('div');
+      div.className = 'book';
+      div.innerHTML = `
+        <img src="${book.cover}" alt="${book.title}" style="width:80px;float:left;margin-right:10px;border-radius:4px;">
+        <h3>${book.title}</h3>
+        <p><strong>${book.author}</strong> | ${book.genre}</p>
+        <p><strong>Price:</strong> $${book.price}</p>
+        <button onclick='addToCart(${JSON.stringify(book)})'>Add to Cart</button>
+        <div style="clear:both;"></div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  // Load books once
+  fetch('/api/books')
+    .then(res => res.json())
+    .then(data => {
+      books = data;
+      displayBooks(books);
+
+      const filter = document.getElementById('genre-filter');
+      filter.addEventListener('change', () => {
+        const value = filter.value;
+        if (value) {
+          displayBooks(books.filter(b => b.genre === value));
+        } else {
+          displayBooks(books);
+        }
+      });
+    });
+
+</script>
+
+</body>
+</html>
